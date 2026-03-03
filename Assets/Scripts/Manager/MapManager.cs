@@ -50,15 +50,15 @@ public class MapManager : MonoBehaviour
 
         MapData mapData = JsonUtility.FromJson<MapData>(mapJsonFile.text);
 
-        // tiles yerine node_list
         GeneratedTiles = mapData.node_list;
 
         for (int i = 0; i < GeneratedTiles.Length; i++)
         {
             Vector3 spawnPosition = new Vector3(0, 0, i * tileSpacing);
-            GameObject newTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity, mapParent);
 
-            // tileIndex yerine step
+            // 90 derece çeviriyoruz ki aþaðýya baksýn tüm kareler
+            GameObject newTile = Instantiate(tilePrefab, spawnPosition, Quaternion.Euler(0, 90, 0), mapParent);
+
             newTile.name = $"Tile_{GeneratedTiles[i].step}";
 
             tileTransforms.Add(newTile.transform);

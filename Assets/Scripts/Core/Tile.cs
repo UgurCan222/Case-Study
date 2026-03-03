@@ -42,8 +42,9 @@ public class Tile : MonoBehaviour
         // Boþ kare
         if (data.is_empty || data.amount <= 0)
         {
-            if (rewardContainer != null) rewardContainer.SetActive(false);
-            if (rewardAmountText != null) rewardAmountText.text = "";
+            // Boþlarda Empty yazsýn
+            if (rewardContainer != null) rewardContainer.SetActive(true);
+            if (rewardAmountText != null) rewardAmountText.text = "Empty";
 
             if (tileMeshRenderer != null && emptyMaterial != null)
                 tileMeshRenderer.material = emptyMaterial;

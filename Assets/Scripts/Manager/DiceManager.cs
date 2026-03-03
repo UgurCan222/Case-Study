@@ -360,7 +360,6 @@ public class DiceManager : MonoBehaviour
             }
         }
 
-        Debug.Log("zarlar atýldý toplam: totalSum");
         //Kullanýcýya göster toplam kaç sayýlýk zar atýlmýþ geriye kaç adým kalmýþ vs.
         string calcString = string.Join(" + ", diceStrings) + " = " + totalSum + " Steps!";
 
