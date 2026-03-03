@@ -11,6 +11,25 @@ ayný interpolasyon kodunu farklý scriptlerde tekrar etmeyeyim.
 public class CustomTween : MonoBehaviour
 {
     private static CustomTween _instance;
+    public static CustomTween Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                // Sahnede var mý
+                _instance = FindFirstObjectByType<CustomTween>();
+
+                if (_instance == null)
+                {
+                    var go = new GameObject("TweenManager_Runtime");
+                    _instance = go.AddComponent<CustomTween>();
+                    DontDestroyOnLoad(go);
+                }
+            }
+            return _instance;
+        }
+    }
 
     // SCALE TWEEN
     public Coroutine ScaleTo(Transform target, Vector3 targetScale, float dur, Action onComplete = null)

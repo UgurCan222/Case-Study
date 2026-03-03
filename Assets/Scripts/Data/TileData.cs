@@ -3,7 +3,7 @@ using UnityEngine;
 
 [Serializable] public class TileData
 {
-    //JSON values
+    //JSONdaki veriler
     public int step;
     public bool is_empty;
     public int fruit;
