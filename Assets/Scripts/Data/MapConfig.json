@@ -1,0 +1,12 @@
+{
+    "node_list": [
+        { "step": 1, "is_empty": true, "fruit": 0, "amount": 0 },
+        { "step": 2, "is_empty": false, "fruit": 0, "amount": 5 },
+        { "step": 3, "is_empty": true, "fruit": 0, "amount": 0 },
+        { "step": 4, "is_empty": false, "fruit": 1, "amount": 3 },
+        { "step": 5, "is_empty": false, "fruit": 2, "amount": 15 },
+        { "step": 6, "is_empty": true, "fruit": 0, "amount": 0 },
+        { "step": 7, "is_empty": false, "fruit": 0, "amount": 8 },
+        { "step": 8, "is_empty": false, "fruit": 1, "amount": 4 }
+    ]
+}
