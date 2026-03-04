@@ -3,6 +3,7 @@
 [🇹🇷 Türkçe](#türkçe) | [🇬🇧 English](#english)
 
 ---
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7033564e-76a7-4e3f-a75c-5ac23b797952" />
 
 <h2 id="türkçe">🇹🇷 Türkçe</h2>
 
