@@ -30,7 +30,7 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton'ý initialize ediyoruz
+        // Singleton initialize
         Instance = this;
     }
 
@@ -133,7 +133,7 @@ public class MapManager : MonoBehaviour
     }
 
     // parlama animasyonu
-    // ColorTo ile peþ peþe (zincirleme) animasyon çaðýrýyor.
+    // ColorTo ile peþ peþe animasyon çaðýrýyor.
     private void AnimateTileGlow(Tile tile)
     {
         if (tile == null || tile.TileMeshRenderer == null) return;

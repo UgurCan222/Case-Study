@@ -31,8 +31,15 @@ public class Dice3D : MonoBehaviour
         targetRotation.y += Random.Range(0, 360f);
 
         float duration = 0.8f;
-        // Zarýn havadayken atacaðý rastgele takla açýsý
-        Vector3 randomSpin = new Vector3(Random.Range(360, 720), Random.Range(360, 720), Random.Range(360, 720));
+
+        // Hedef rotasyona ek olarak 3 ile 5 tam tur arasý (1080 - 1800 derece) ekstra dönüþ ekliyoruz
+        Vector3 extraSpins = new Vector3(
+            Random.Range(3, 6) * 360f,
+            Random.Range(3, 6) * 360f,
+            Random.Range(3, 6) * 360f
+        );
+
+        Vector3 startRotation = targetRotation + extraSpins;
 
         // Animasyonlarýn bitiþini takip
         bool isJumpComplete = false;
@@ -41,8 +48,8 @@ public class Dice3D : MonoBehaviour
         // Zýplayarak hedefe git
         CustomTween.Instance.JumpTo(transform, end, jumpHeight, duration, () => isJumpComplete = true);
 
-        // Rastgele takladan hedef rotasyona doðru dön
-        CustomTween.Instance.RotateFromTo(transform, randomSpin, targetRotation, duration, () => isRotateComplete = true);
+        // Hesaplanmýþ çoklu takla açýsýndan (startRotation) olmasý gereken yüzeye (targetRotation) dön
+        CustomTween.Instance.RotateFromTo(transform, startRotation, targetRotation, duration, () => isRotateComplete = true);
 
         // Her iki customtween iþleminin de ayný anda bitmesini bekle
         yield return new WaitUntil(() => isJumpComplete && isRotateComplete);

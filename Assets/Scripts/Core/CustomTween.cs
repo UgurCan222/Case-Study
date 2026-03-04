@@ -50,7 +50,7 @@ public class CustomTween : MonoBehaviour
             if (tr == null) yield break;
             timer += Time.deltaTime;
             float step = Mathf.Clamp01(timer / d);
-            float curve = 1f - Mathf.Pow(1f - step, 3f);
+            float curve = 1f - Mathf.Pow(1f - step, 3f); // Cubic Ease-Out
             tr.localScale = Vector3.Lerp(start, goal, curve);
             yield return null;
         }
@@ -77,9 +77,15 @@ public class CustomTween : MonoBehaviour
         {
             if (tr == null) yield break;
             timer += Time.deltaTime;
+
             float t = timer / d;
-            Vector3 currentPos = Vector3.Lerp(start, goal, t);
+            // Ýleri hareketin smooth durmasý için ease-out ekledik
+            float curve = 1f - Mathf.Pow(1f - t, 2f);
+
+            Vector3 currentPos = Vector3.Lerp(start, goal, curve);
+            // Yüksekliði bozmamak için t'yi (doðrusal zamaný) kullanmaya devam ediyoruz
             currentPos.y += Mathf.Sin(t * Mathf.PI) * height;
+
             tr.position = currentPos;
             yield return null;
         }
@@ -88,7 +94,7 @@ public class CustomTween : MonoBehaviour
         done?.Invoke();
     }
 
-    // DÜZ HAREKETTWEENÝ
+    // DÜZ HAREKET TWEENÝ
     public Coroutine MoveTo(Transform target, Vector3 targetPos, float dur, Action onComplete = null)
     {
         if (target == null) return null;
@@ -107,7 +113,8 @@ public class CustomTween : MonoBehaviour
             if (tr == null) yield break;
             timer += Time.deltaTime;
             float step = Mathf.Clamp01(timer / d);
-            tr.position = Vector3.Lerp(start, goal, step);
+            float curve = 1f - Mathf.Pow(1f - step, 2f); // Ease-Out
+            tr.position = Vector3.Lerp(start, goal, curve);
             yield return null;
         }
 
@@ -132,8 +139,14 @@ public class CustomTween : MonoBehaviour
         {
             if (tr == null) yield break;
             timer += Time.deltaTime;
-            float step = Mathf.Clamp01(timer / d);
-            tr.rotation = Quaternion.Lerp(Quaternion.Euler(start), Quaternion.Euler(goal), step);
+
+            float t = Mathf.Clamp01(timer / d);
+            // Dönme iþleminin de fýrlatma fiziðine uygun olarak smooth durmasýný saðladýk
+            float curve = 1f - Mathf.Pow(1f - t, 3f);
+
+            // Quaternion.Lerp yerine euler açýlarýný vector3 olarak lerpliyoruz
+            // Böylece birkaç tur atsýn diye 360 dereceden büyük yazdýðým deðerleri yuvarlamaz her bir turu döner, güzel animasyon olur
+            tr.eulerAngles = Vector3.Lerp(start, goal, curve);
             yield return null;
         }
 
@@ -217,6 +230,33 @@ public class CustomTween : MonoBehaviour
         }
 
         onUpdate?.Invoke(goal);
+        done?.Invoke();
+    }
+
+    // KAMERA TAKÝP TWEENÝ
+    public Coroutine FollowDynamicZ(Transform target, Func<float> getTargetZ, float smoothTime, Action onComplete = null)
+    {
+        if (target == null || getTargetZ == null) return null;
+        return StartCoroutine(DoFollowDynamicZ(target, getTargetZ, smoothTime, onComplete));
+    }
+
+    private IEnumerator DoFollowDynamicZ(Transform tr, Func<float> getTargetZ, float smoothTime, Action done)
+    {
+        float velocityZ = 0f;
+
+        while (tr != null)
+        {
+            // Fonksiyon üzerinden her frame en güncel hedefi çekiyoruz
+            float targetZ = getTargetZ();
+            float currentZ = tr.position.z;
+
+            // Sürekli takipte Lerp yerine SmoothDamp kullanýyoruz ki daha akýcý olsun
+            float newZ = Mathf.SmoothDamp(currentZ, targetZ, ref velocityZ, smoothTime);
+            tr.position = new Vector3(tr.position.x, tr.position.y, newZ);
+
+            yield return null;
+        }
+
         done?.Invoke();
     }
 

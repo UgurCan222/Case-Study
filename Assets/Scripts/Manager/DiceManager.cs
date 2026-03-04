@@ -313,11 +313,15 @@ public class DiceManager : MonoBehaviour
         int columns = Mathf.Min(targetDiceCount, maxColumns);
         int rows = Mathf.CeilToInt((float)targetDiceCount / columns);
 
-        // Buradaki Mathf.Lerp bir animasyon interpolasyonu deðildir. Zar boyutunun anlýk matematiksel oranýný hesaplar
-        float scaleVal = targetDiceCount <= 5 ? 0.7f : Mathf.Lerp(0.7f, 0.35f, (targetDiceCount - 5) / 15f);
+        // Burada basit bir lerp kullanýyorum
+        // Bu iþlem için custom tween sistemine gitmeye gerek yok çünkü anlýk bir deðer hesaplýyoruz
+        // Zar sayýsý 5 veya altýndaysa scale sabit 1.2
+        // 5’ten büyükse 1.2 ile 0.6 arasýnda kademeli olarak küçültüyorum
+        float scaleVal = targetDiceCount <= 5 ? 1.2f : Mathf.Lerp(1.2f, 0.6f, (targetDiceCount - 5) / 15f);
         Vector3 targetScale = Vector3.one * scaleVal;
 
-        float baseSpacing = 0.85f;
+        // Tileler arasý mesafe
+        float baseSpacing = 1.6f;
         float spacingX = baseSpacing * scaleVal;
         float spacingZ = baseSpacing * scaleVal;
 
@@ -333,6 +337,7 @@ public class DiceManager : MonoBehaviour
             float offsetY = 0f;
             float offsetZ = -row * spacingZ;
 
+            // Rastgele sapmalar (Jitter) korunarak biraz daha organik bir daðýlým saðlandý.
             float randomJitterX = Random.Range(-0.15f, 0.15f) * scaleVal;
             float randomJitterZ = Random.Range(-0.15f, 0.15f) * scaleVal;
 
@@ -395,7 +400,7 @@ public class DiceManager : MonoBehaviour
                 statusText.text = $"Moving... {stepsLeft} steps left";
             }
 
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.5f); //Oyuncu piyonun hareket tamamlama süresini 0.5 girdiðim için bunda da direkt 0.5 giriyorum ki senkron olsun
             stepsLeft--;
         }
 
